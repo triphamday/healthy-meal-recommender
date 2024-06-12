@@ -1,7 +1,9 @@
 import streamlit as st
 import requests
 import pandas as pd
+import re
 from streamlit_echarts import st_echarts
+import streamlit.components.v1 as components
 
 # Display class to handle the display of recommendations
 class Display:
@@ -12,8 +14,8 @@ class Display:
     def display_recommendation(self, recommendations):
         st.subheader('Recommended Recipes:')
         if recommendations:
-            rows = len(recommendations) // 5 + 1
-            for column, row in zip(st.columns(5), range(5)):
+            rows = len(recommendations) // 2 + 1
+            for column, row in zip(st.columns(2), range(2)):
                 with column:
                     for idx in range(rows * row, min(rows * (row + 1), len(recommendations))):
                         recipe = recommendations[idx]
@@ -40,7 +42,7 @@ class Display:
                             - Total Time      : {recipe['Time (mins)']} min
                         """)
 
-                        if st.button(f"View Recipe {recipe['RecipeID']}", key=f"button_{recipe['RecipeID']}"):
+                        if st.button(f"View Recipe", key=f"button_{recipe['RecipeID']}"):
                             st.session_state.page = 'Recipe Detail'
                             st.experimental_set_query_params(recipe_id=recipe['RecipeID'])
                             st.experimental_rerun()
@@ -56,6 +58,8 @@ class Display:
             st.markdown(f'<h5 style="text-align: center;font-family:sans-serif;">Nutritional Values:</h5>',
                         unsafe_allow_html=True)
             selected_recipe = next(r for r in recommendations if r['Title'] == selected_recipe_name)
+
+
             options = {
                 "title": {"text": "Nutrition values", "subtext": f"{selected_recipe_name}", "left": "center"},
                 "tooltip": {"trigger": "item"},
@@ -65,8 +69,12 @@ class Display:
                         "name": "Nutrition values",
                         "type": "pie",
                         "radius": "50%",
-                        "data": [{"value": selected_recipe[nutrition_value], "name": nutrition_value} for
-                                 nutrition_value in self.nutrition_values],
+                        "data": [
+                            {"value": selected_recipe[nutrition_value] / 1000 if nutrition_value in ['Cholesterol (mg)','Sodium (mg)'] else selected_recipe[nutrition_value],
+                             "name": nutrition_value.replace('(mg)', '(g)')}
+                            # Thay đổi tên hiển thị từ '(mg)' sang '(g)'
+                            for nutrition_value in self.nutrition_values if nutrition_value not in ['Calories']
+                        ],
                         "emphasis": {
                             "itemStyle": {
                                 "shadowBlur": 10,
@@ -83,7 +91,7 @@ class Display:
 
 # Function to get user input
 def user_input_features():
-    st.sidebar.header('User Input Parameters')
+    st.sidebar.header('Your infomations')
     calories = st.sidebar.slider('Calories', min_value=0, max_value=2000, value=500)
     total_fat = st.sidebar.slider('Total Fat (g)', min_value=0, max_value=100, value=20)
     saturated_fat = st.sidebar.slider('Saturated Fat (g)', min_value=0, max_value=50, value=10)
@@ -135,7 +143,6 @@ def main():
 
 # Function to display introduction page
 def show_introduction():
-    # Custom CSS for background color
     background_color_style = """
             <style>
                 body {
@@ -145,25 +152,25 @@ def show_introduction():
         """
     st.markdown(background_color_style, unsafe_allow_html=True)
 
-    st.markdown("<h1 style='text-align: center; margin-bottom: 70px;'>Chào mừng bạn đến với đồ án của chúng tôi</h1>",
+    st.markdown("<h1 style='text-align: center; margin-bottom: 70px;'>Welcome to my world</h1>",
                 unsafe_allow_html=True)
     st.markdown(
-        "<p style='text-align: center; margin-bottom: 70px;'><i>Mỗi món ăn là một hành trình khám phá vị giác, nơi bạn tìm thấy niềm vui và sự thỏa mãn.</i></p>",
+        "<p style='text-align: center; margin-bottom: 70px;'><i>Food, in the end, in our own tradition, is something holy. It's not about nutrients and calories. It's about sharing. It's about honesty. It's about identity.</i></p>",
         unsafe_allow_html=True
     )
     # CSS style for the button
     button_style = """
            <style>
                .stButton>button {
-                   background-color: #ff5733; /* Set your desired color code here */
-                   color: red;
+                   background-color: #2a481d; /* Set your desired color code here */
+                   color: #fff5ec;
                    border-radius: 5px;
                    padding: 10px 20px;
                }
            </style>
        """
     st.markdown(button_style, unsafe_allow_html=True)
-    if st.columns(3)[1].button("Go to Recommendation System"):
+    if st.columns(3)[1].button("Explore culinary dreams", use_container_width=True):
         st.session_state.page = 'Recommendation'
         st.experimental_rerun()
 
@@ -174,8 +181,18 @@ def show_recommendation():
     st.markdown(title, unsafe_allow_html=True)
 
     input_data = user_input_features()
-
-    if st.button('Predict'):
+    button_style = """
+                   <style>
+                       .stButton>button {
+                           background-color: #2a481d; /* Set your desired color code here */
+                           color: #fff5ec;
+                           border-radius: 5px;
+                           padding: 10px 20px;
+                       }
+                   </style>
+               """
+    st.markdown(button_style, unsafe_allow_html=True)
+    if st.columns(3)[0].button('Predict'):
         recommendations = get_recommendations(input_data)
         if recommendations:
             st.session_state.recommendations = recommendations
@@ -188,10 +205,14 @@ def show_recommendation():
         with st.container():
             display.display_overview(st.session_state.recommendations)
 
-    if st.button("Back to Introduction"):
+    if st.button("Back to Introduction", use_container_width=True):
         st.session_state.page = 'Introduction'
         st.experimental_rerun()
 
+def clean_direction(direction):
+    unwanted_chars = "':., "
+    cleaned_direction = ''.join(char for char in direction if char not in unwanted_chars)
+    return cleaned_direction
 
 # Function to display recipe detail page
 def show_recipe_detail():
@@ -204,13 +225,29 @@ def show_recipe_detail():
 
         st.markdown(f"## {recipe['Title']}")
         st.markdown(f"**Time to prepare:** {recipe['Time (mins)']} min")
-        st.markdown("### Ingredients")
-        for ingredient in recipe['Ingredient'].split(';'):
-            st.markdown(f"- {ingredient}")
-        st.markdown("### Directions")
-        for direction in recipe['Direction'].split(';'):
-            st.markdown(f"- {direction}")
 
+        st.markdown("### Ingredients")
+        # Loại bỏ dấu '[' và ']' ra khỏi danh sách thành phần
+        ingredient_list = recipe['Ingredient'].strip("[]")
+
+        # Loại bỏ dấu "'" và khoảng trắng dư thừa từ mỗi thành phần trong danh sách
+        ingredient_list = [ingredient.strip("' ") for ingredient in ingredient_list.split(',')]
+        # Hiển thị danh sách thành phần đã được xử lý
+        for ingredient in ingredient_list:
+            st.markdown(f"- {ingredient.strip()}")
+        # Loại bỏ khoảng trắng dư thừa từ các thành phần
+
+        st.markdown("### Directions")
+        # Loại bỏ các dấu thừa từ các hướng dẫn bằng cách sử dụng hàm clean_direction
+        directions = recipe['Direction']
+        # Sử dụng re.findall để tìm tất cả các mẫu văn bản giữa dấu chấm
+        direction_list = re.findall(r'[^.]+', directions)
+        # Gộp các hướng dẫn thành một đoạn văn bản duy nhất
+        full_directions = ". ".join(direction.strip() for direction in direction_list)
+        full_directions = re.sub(r'\[\'|\', \'|\']', '', full_directions)
+        full_directions = re.sub(r':', '', full_directions)
+        full_directions = re.sub(r',\s*,', ',', full_directions)  # Loại bỏ các dấu phẩy liên tiếp
+        st.markdown(full_directions)
     else:
         st.error("No recipe selected!")
 
