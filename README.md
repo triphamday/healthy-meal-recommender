@@ -81,9 +81,8 @@ healthy-meal-recommender/
 - **Ngrok** for exposing local server to public internet.
   
 ## 📸 Demo Preview
-
-![Demo Screenshot](img/Screenshot (237).png)
-![Demo Screenshot](img/Screenshot (238).png)
+![Demo Screenshot](img/Screenshot%20%28237%29.png)
+![Demo Screenshot](img/Screenshot%20%28238%29.png)
 
 
 ---
