@@ -7,22 +7,6 @@
 Welcome to the **Healthy Meal Recommendation System**!  
 This project aims to **promote healthy eating habits** by recommending nutritious recipes tailored to your preferences — based on ingredients, dietary needs, and nutrition data — using machine learning techniques.  
 
-## ✨ Features
-
-- Content-Based Recommendations: Suggests recipes by analyzing ingredients and nutrition facts.
-
-- Automated Data Crawling: Collects recipe data from trusted sites (Food.com & EatingWell) using Selenium.
-
-- Rich Dataset: Over 11,000 healthy recipes with detailed nutritional info combined from multiple sources.
-
-- Comprehensive Data Preprocessing: Cleaned, parsed, and evaluated data quality based on 5 criteria.
-
-- Machine Learning Model: Uses Nearest Neighbors with cosine similarity for accurate, relevant recipe suggestions.
-
-- Interactive Demo: Web app powered by Streamlit + FastAPI, with Ngrok support for external access.
-
-- Pipeline Automation: Data collection and labeling automated via Apache Airflow.
-
 ## 📁 Project Structure
 ```bash
 healthy-meal-recommender/
