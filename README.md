@@ -82,7 +82,9 @@ healthy-meal-recommender/
   
 ## 📸 Demo Preview
 
-*Paste your demo screenshot/image here*
+![Demo Screenshot](img/Screenshot (237).png)
+![Demo Screenshot](img/Screenshot (238).png)
+
 
 ---
 
