@@ -4,7 +4,6 @@
 
 ## 🚀 Project Overview
 
-Welcome to the **Healthy Meal Recommendation System**!  
 This project aims to **promote healthy eating habits** by recommending nutritious recipes tailored to your preferences — based on ingredients, dietary needs, and nutrition data — using machine learning techniques.  
 
 ## 📁 Project Structure
