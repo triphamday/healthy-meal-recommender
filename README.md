@@ -40,11 +40,11 @@ healthy-meal-recommender/
 - Fill missing nutritional info where necessary.  
 - Normalize nutritional data for modeling.  
 - Evaluate data quality based on:  
-  - ✅ Accuracy  
-  - ✅ Completeness  
-  - ✅ Consistency  
-  - ✅ Timeliness  
-  - ✅ Relevance  
+  - Accuracy  
+  - Completeness  
+  - Consistency  
+  - Timeliness  
+  - Relevance  
 
 ### Modeling
 
