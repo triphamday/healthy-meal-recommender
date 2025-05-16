@@ -2,11 +2,11 @@
 
 
 
-## 🚀 Project Overview
+### 🚀 Project Overview
 
 This project aims to **promote healthy eating habits** by recommending nutritious recipes tailored to your preferences — based on ingredients, dietary needs, and nutrition data — using machine learning techniques.  
 
-## 📁 Project Structure
+### 📁 Project Structure
 ```bash
 healthy-meal-recommender/
 ├── crawl/ # Web scraping & data crawling scripts
@@ -21,7 +21,7 @@ healthy-meal-recommender/
 └── README.md # Project overview (this file)
 ```
 
-## 📥 Data Collection
+### 📥 Data Collection
 
 - **Sources**:  
   - Food.com (500k+ recipes, regularly updated)  
@@ -33,7 +33,7 @@ healthy-meal-recommender/
   - Combined dataset contains **11,102 recipes**.  
   - Features: title, ingredients, cooking instructions, calories, fats, cholesterol, sodium, carbs, fiber, sugars, protein, and diet labels.
 
-## 🧹 Data Preprocessing
+### 🧹 Data Preprocessing
 
 - Clean, merge and standardize data from multiple sources.  
 - Extract ingredient quantities and units with `ingredient_parser`.  
@@ -46,7 +46,7 @@ healthy-meal-recommender/
   - ✅ Timeliness  
   - ✅ Relevance  
 
-## 🤖 Modeling
+### 🤖 Modeling
 
 - Algorithm: **Nearest Neighbors** with brute-force search and **cosine similarity**.  
 - Purpose: Find and recommend nutritionally similar and ingredient-relevant healthy recipes.  
@@ -57,7 +57,7 @@ healthy-meal-recommender/
   - Filter by nutritional thresholds  
   - Recommend top matching recipes  
 
-## 🌐 Deployment & Demo
+### 🌐 Deployment & Demo
 
 - Web app built with **Streamlit** for easy interaction.  
 - Backend API powered by **FastAPI** for scalability.  
@@ -70,7 +70,7 @@ healthy-meal-recommender/
 
 ---
 
-## 🛠 How to Run
+### 🛠 How to Run
 
 1. Clone the repository.
 
