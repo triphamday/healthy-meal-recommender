@@ -85,11 +85,11 @@ healthy-meal-recommender/
 streamlit run demo/app.py
 ```
 
-👥 Contributors
+### 👥 Contributors
 - Phạm Ngọc Trí (22521526)
 - Lê Xuân Bình (22520131)
 
-Acknowledgments
+### Acknowledgments
 - This project is part of the Preprocessing and Dataset Construction (DS108.O21) course at UIT.
 - Thanks to the data sources: Food.com, EatingWell.
 - Advisors: TS. Nguyễn Gia Tuấn Anh & Trần Quốc Khánh.
